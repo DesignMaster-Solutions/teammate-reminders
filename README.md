@@ -5,7 +5,7 @@ Teammate Reminders is a Jira Cloud app by Design Master Solutions. Set a reminde
 ## Set a reminder
 
 1. Open a Jira issue. Below the title, click the **View app actions** icon and choose **Reminders**. The panel stays on the issue.
-2. Pick the **Date** and the **Time (24h)**. The list offers 15-minute steps and you can type any minute. Times use your Jira/browser time zone.
+2. Pick the **Date** and the **Time (24h)**. The list offers 15-minute steps and you can type any minute. Times use your Jira/browser time zone. The shortcuts above the fields fill both in one click: **In 1 hour** (rounded up to the next quarter hour), **Tomorrow 09:00** and **Next Monday 09:00**.
 3. Under **Remind**, choose Me, Assignee, Reporter or Watchers. Add up to 20 people in **Also remind these people**.
 4. Under **How**, choose one:
    - **Private e-mail from Jira**: only the recipients see it. The subject carries the issue key and your note (`Reminder: KEY: note (summary)`), so it reads in the inbox list.
