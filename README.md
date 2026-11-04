@@ -20,7 +20,7 @@ Reminders go out within 5 minutes of the chosen time.
 ## See, snooze and cancel your reminders
 
 - **On the issue:** the panel lists what is upcoming there, with a **Cancel** button.
-- **Everywhere:** in the Jira sidebar, open **Apps > My reminders** for the reminders you created, with their status. **Snooze 1 day** moves an upcoming reminder a day later, or sends a reminder that already went out once more, one day from now; **Cancel** stops an upcoming one.
+- **Everywhere:** in the Jira sidebar, open **Apps > My reminders** for the reminders you created: **Upcoming** on top, the next one to go out first, and **History** below (sent, cancelled, failed), newest first. **Snooze 1 day** moves an upcoming reminder a day later, or sends a reminder that already went out once more, one day from now; **Cancel** stops an upcoming one.
 
 ## For Jira admins
 
