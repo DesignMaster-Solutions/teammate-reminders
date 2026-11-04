@@ -10,7 +10,7 @@ Teammate Reminders is a Jira Cloud app by Design Master Solutions. Set a reminde
 4. Under **How**, choose one:
    - **Private e-mail from Jira**: only the recipients see it. The subject carries the issue key and your note (`Reminder: KEY: note (summary)`), so it reads in the inbox list.
    - **Comment with @mention**: a comment on the issue that mentions the recipients, so they get the Jira bell and the e-mail.
-5. Under **Repeat**, choose Once, Every day or Every week.
+5. Under **Repeat**, choose Once, Every day, Every weekday (Mon-Fri) or Every week. Every weekday skips Saturday and Sunday in your own time zone, so a Friday reminder comes back on Monday at the same local time.
 6. Add an optional **Note** and click **Set reminder**.
 
 Recipients are resolved when the reminder is sent, so if the issue changes hands the new assignee gets it. With **Skip if the issue is already done** on, a reminder on a finished issue is not sent, and a repeating reminder stops.
