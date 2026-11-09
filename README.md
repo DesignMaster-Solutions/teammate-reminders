@@ -5,12 +5,12 @@ Teammate Reminders is a Jira Cloud app by Design Master Solutions. Set a reminde
 ## Set a reminder
 
 1. Open a Jira issue. Below the title, click the **View app actions** icon and choose **Reminders**. The panel stays on the issue.
-2. Pick the **Date** and the **Time (24h)**. The list offers 15-minute steps and you can type any minute. Times use your Jira/browser time zone. The shortcuts above the fields fill both in one click: **In 1 hour** (rounded up to the next quarter hour), **Tomorrow 09:00** and **Next Monday 09:00**.
+2. Pick the **Date** and the **Time (24h)**. The list offers 15-minute steps and you can type any minute. Times use your Jira/browser time zone. The shortcuts above the fields fill both in one click: **In 1 hour** and **In 3 hours** (rounded up to the next quarter hour), **Today 17:00** (offered until 16:00), **Tomorrow 09:00** and **Next Monday 09:00**.
 3. Under **Remind**, choose Me, Assignee, Reporter or Watchers. Add up to 20 people in **Also remind these people**.
 4. Under **How**, choose one:
    - **Private e-mail from Jira**: only the recipients see it. The subject carries the issue key and your note (`Reminder: KEY: note (summary)`), so it reads in the inbox list.
    - **Comment with @mention**: a comment on the issue that mentions the recipients, so they get the Jira bell and the e-mail.
-5. Under **Repeat**, choose Once, Every day, Every weekday (Mon-Fri) or Every week. Every weekday skips Saturday and Sunday in your own time zone, so a Friday reminder comes back on Monday at the same local time.
+5. Under **Repeat**, choose Once, Every day, Every weekday (Mon-Fri), Every week or Every month. Every weekday skips Saturday and Sunday in your own time zone, so a Friday reminder comes back on Monday at the same local time. Every month keeps the same day of the month and the same local time; a shorter month uses its last day.
 6. Add an optional **Note** and click **Set reminder**.
 
 Recipients are resolved when the reminder is sent, so if the issue changes hands the new assignee gets it. With **Skip if the issue is already done** on, a reminder on a finished issue is not sent, and a repeating reminder stops.
@@ -20,7 +20,7 @@ Reminders go out within 5 minutes of the chosen time.
 ## See, snooze and cancel your reminders
 
 - **On the issue:** the panel lists what is upcoming there, with a **Cancel** button.
-- **Everywhere:** in the Jira sidebar, open **Apps > My reminders** for the reminders you created: **Upcoming** on top, the next one to go out first, and **History** below (sent, cancelled, failed), newest first. **Snooze 1 day** moves an upcoming reminder a day later, or sends a reminder that already went out once more, one day from now; **Cancel** stops an upcoming one. The status says why a reminder did not go out: **not sent: issue was done** (you chose to skip done issues), **not sent: issue deleted**, **not sent: nobody to notify** (for example, no assignee yet), **retrying (N of 5)** while Jira is not answering, and **failed after 5 tries** after that.
+- **Everywhere:** in the Jira sidebar, open **Apps > My reminders** for the reminders you created: **Upcoming** on top, the next one to go out first, and **History** below (sent, cancelled, failed), newest first. **Snooze 1 day** or **1 week** moves an upcoming reminder later, or sends a reminder that already went out once more, one day or one week from now; **Cancel** stops an upcoming one. The status says why a reminder did not go out: **not sent: issue was done** (you chose to skip done issues), **not sent: issue deleted**, **not sent: nobody to notify** (for example, no assignee yet), **retrying (N of 5)** while Jira is not answering, and **failed after 5 tries** after that.
 
 ## For Jira admins
 
