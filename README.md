@@ -2,6 +2,8 @@
 
 Teammate Reminders is a Jira Cloud app by Design Master Solutions. Set a reminder on any issue for yourself, the assignee, the reporter, the watchers or specific teammates, at an exact date and 24-hour time. This repository holds the public documentation and is the place to report problems.
 
+Install [Teammate Reminders for Jira from the Atlassian Marketplace](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira). Ask a Jira admin to install it on your Jira Cloud site and activate its subscription.
+
 ## Set a reminder
 
 1. Open a Jira issue. Below the title, click the **View app actions** icon and choose **Reminders**. The panel stays on the issue.
@@ -15,12 +17,32 @@ Teammate Reminders is a Jira Cloud app by Design Master Solutions. Set a reminde
 
 Recipients are resolved when the reminder is sent, so if the issue changes hands the new assignee gets it. With **Skip if the issue is already done** on, a reminder on a finished issue is not sent, and a repeating reminder stops.
 
-Reminders go out within 5 minutes of the chosen time.
+The app checks for due reminders every 5 minutes. Delivery is not an exact-time guarantee: processing and retries can delay it. Check **Apps > My reminders** for the current status.
 
 ## See, snooze and cancel your reminders
 
 - **On the issue:** the panel lists what is upcoming there, with a **Cancel** button.
 - **Everywhere:** in the Jira sidebar, open **Apps > My reminders** for the reminders you created: **Upcoming** on top, the next one to go out first, and **History** below (sent, cancelled, failed), newest first. **Snooze 1 day** or **1 week** moves an upcoming reminder later, or sends a reminder that already went out once more, one day or one week from now; **Cancel** stops an upcoming one. The status says why a reminder did not go out: **not sent: issue was done** (you chose to skip done issues), **not sent: issue deleted**, **not sent: nobody to notify** (for example, no assignee yet), **retrying (N of 5)** while Jira is not answering, and **failed after 5 tries** after that.
+
+### What snooze changes
+
+Only the creator can snooze or cancel a reminder. Snooze buttons appear for pending reminders and sent one-off reminders. A future reminder moves 1 or 7 days beyond its existing due time; an overdue or sent reminder moves 1 or 7 days from now. Cancelled reminders must be created again from the issue.
+
+Snoozing a monthly reminder also changes the day used for future repeats. For example, moving a reminder to February 28 makes its next monthly occurrence March 28. Without snoozing, a schedule originally set for the 31st uses the last day of February and returns to March 31.
+
+### If a reminder does not arrive
+
+| What you see | What to do |
+|---|---|
+| **retrying (N of 5)** | The app will try again. Check the status after a later scheduled run before creating a duplicate. |
+| **failed after 5 tries** | Automatic retries have stopped. Check that the issue is accessible and contact support with the issue key, due time and status. Once the cause is resolved, set a new reminder from the issue. |
+| **not sent: nobody to notify** | Check that the selected role has a person, such as an assignee, or choose a specific teammate. Create a new one-off reminder if needed. |
+| **not sent: issue was done** | The skip-done option prevented delivery and stopped any recurrence. Create a new reminder and turn that option off if a completed issue still needs follow-up. |
+| **not sent: issue deleted** | Set a reminder on the replacement issue, if one exists. |
+| Subscription not active | Ask a Jira admin to activate or renew the app subscription. |
+| Reminders turned off for this project | Ask a Jira admin to check the project allowlist. |
+
+New reminders must be at least 1 minute in the future and within the next 12 months. Notes can have up to 1,000 characters; at least one recipient role or person must be selected.
 
 ## For Jira admins
 
