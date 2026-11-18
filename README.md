@@ -44,6 +44,32 @@ Snoozing a monthly reminder also changes the day used for future repeats. For ex
 
 New reminders must be at least 1 minute in the future and within the next 12 months. Notes can have up to 1,000 characters; at least one recipient role or person must be selected.
 
+## Worked example: follow up on a supplier every weekday
+
+Use this when an open issue needs a weekday follow-up from whoever owns it at the time. This example reminds a person; it does not create recurring issues.
+
+[Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira), or ask your Jira admin to install it, then try the example on a test issue assigned to you. Review the current Marketplace pricing and subscription terms with your admin before activating it.
+
+**Example input:** an open issue `OPS-42`, titled `Confirm replacement shipment`, with an assignee. The key and people here are illustrative, not a customer record.
+
+1. Open **View app actions > Reminders** on your test issue.
+2. Choose a future weekday at **09:00** in your local time. For the fixed example below, use Friday **20 November 2026**, in UTC-3; if that date has passed, pick a future weekday instead.
+3. Under **Remind**, select **Assignee** only. Leave **Also remind these people** empty. Choose **Private e-mail from Jira**, then **Every weekday (Mon-Fri)**.
+4. Enter `Check supplier confirmation` as the note, keep **Skip if the issue is already done** enabled, and click **Set reminder** once.
+5. Open **Apps > My reminders** and find the pending reminder under **Upcoming**. Check the issue key and scheduled time before leaving it running.
+
+**Expected first result:** when the scheduled job processes the due reminder, the app asks Jira to notify the current assignee. If ownership changed after you set it, the new assignee is selected. For the sample issue, the generated subject is:
+
+```text
+Reminder: OPS-42: Check supplier confirmation (Confirm replacement shipment)
+```
+
+For a successful run on Friday 20 November at 09:00 UTC-3, the next due time is Monday 23 November at 09:00 UTC-3 (12:00 UTC). The repeating reminder stays under **Upcoming** with its next due time; do not expect a separate **History** row for each successful occurrence. The scheduler checks every five minutes, so 09:00 is a due time, not a guaranteed inbox arrival time. A successful Jira request does not prove that an email reached the inbox.
+
+**Finish the test:** click **Cancel** on the upcoming reminder. In a real follow-up, moving the issue to a status in Jira’s Done category before the next run makes the skip-done option stop the recurrence. If it does not arrive, use the recovery table above before creating another reminder.
+
+**Validation scope:** the sample recipient, exact subject, Friday-to-Monday calculation and Done-category detection were checked against the app’s production logic. This is a worked example, not evidence of an email delivered to a real user. Time-zone example assumes a fixed UTC-3 offset.
+
 ## For Jira admins
 
 **Jira settings > Apps > Teammate Reminders** takes a list of project keys (for example `SHOP, OPS`). Reminders can then be set only in those projects. Empty means every project.
