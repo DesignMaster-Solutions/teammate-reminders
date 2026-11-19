@@ -92,7 +92,16 @@ Reminder @your-account: QA: confirm the reminder appears in this issue
 
 **Finish:** Once does not schedule another occurrence. To stop it before processing, use **Cancel**. Do not click **Snooze** after a successful test unless you want another reminder. The comment is part of the issue history, not a private message.
 
+### Verified QA result, 18 November 2026
+
+On our existing Forge **development** installation, we scheduled the example on test issue `LEG-8` for **23:20 UTC-3**, with **Me**, **Comment with @mention** and **Once**. Jira created comment `10036` at **23:20:25 UTC-3**, authored by **Teammate Reminders for Jira**, with the exact note and a mention of our own account. My reminders changed from **Upcoming (1)** / **pending** to **Upcoming (0)** and a **sent** row in History.
+
+![Actual comment from the QA run, mentioning our account and showing the exact note](docs/comment-reminder-qa.png)
+
+This proves a scheduled comment on the QA installation, not a new Marketplace installation, production subscription activation or email delivery. The screenshot is public so you can inspect the result without access to our test site. [Try the same steps with Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira).
+
 ## For Jira admins
+
 
 **Jira settings > Apps > Teammate Reminders** takes a list of project keys (for example `SHOP, OPS`). Reminders can then be set only in those projects. Empty means every project.
 
