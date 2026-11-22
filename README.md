@@ -30,6 +30,22 @@ Only the creator can snooze or cancel a reminder. Snooze buttons appear for pend
 
 Snoozing a monthly reminder also changes the day used for future repeats. For example, moving a reminder to February 28 makes its next monthly occurrence March 28. Without snoozing, a schedule originally set for the 31st uses the last day of February and returns to March 31.
 
+### A sent one-off keeps Snooze
+
+The Marketplace highlight "Every reminder in one list" shows this screen. On the app, **Snooze 1 day** and **1 week** stay on a reminder that already went out once. The listing caption is "My reminders on 21 Nov 2026. Sent SHOP-6 still has Snooze 1 day and 1 week." The image file on the listing is `2689ffda-3481-4c9c-bcab-751ec1302391`. Atlassian recompressed it, so the bytes differ from the file in this guide.
+
+Measured on 21 November 2026 on the existing Forge development installation. Upcoming was empty: "Nothing scheduled. Snooze a sent reminder or set a new one from an issue." In History, `SHOP-6` was **sent**, shown as **4 Nov 2026, 01:11**, with the note "Refund button is due for review. Please post the status." That row offered **Snooze 1 day** and **1 week**. Cancelled rows on the same page did not. The buttons were not clicked, so the site stored nothing new.
+
+![My reminders on 21 Nov 2026. Upcoming is empty, and sent SHOP-6 still has Snooze 1 day and 1 week.](docs/snooze-sent-one-off.jpg)
+
+What those buttons change comes from the production logic (source `5b668669`), run at `2026-11-22T01:42:54.529Z` and not applied on the site:
+
+- **Snooze 1 day** on a sent one-off makes it pending again, due `2026-11-23T01:42:54.529Z`, retry count 0.
+- **Snooze 1 week** on that same sent one-off makes it pending, due `2026-11-29T01:42:54.529Z`.
+- **Snooze 1 day** on a pending reminder that is still one hour away moves that due time by 24 hours, to `2026-11-23T02:42:54.529Z`. It does not start the day from the moment you click.
+
+[Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira). This screen is the development installation, not a new Marketplace install and not a clicked snooze.
+
 ### If a reminder does not arrive
 
 | What you see | What to do |
