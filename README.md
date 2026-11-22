@@ -58,6 +58,19 @@ What those buttons change comes from the production logic (source `5b668669`), r
 | Subscription not active | Ask a Jira admin to activate or renew the app subscription. |
 | Reminders turned off for this project | Ask a Jira admin to check the project allowlist. |
 
+### If Set reminder refuses before anything is saved
+
+[Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira), then open an issue and click **View app actions > Reminders**. These two sentences appear in red on that panel when you click **Set reminder**. The app has not stored a reminder, so **Apps > My reminders** does not gain a row.
+
+| What you see | What to do |
+|---|---|
+| **You cannot see this issue.** | The app could not confirm that you have Browse projects on that issue. Open an issue you can view, or ask a Jira admin for access. |
+| **You cannot comment on this issue. Choose a private email reminder instead.** | You can browse the issue, and **How** is **Comment with @mention**. Comment delivery needs Add comments. Switch **How** to **Private e-mail from Jira**, or ask for permission to comment. Private e-mail is accepted when you can browse the issue. |
+
+**Example input:** you can open the issue, **How** is **Comment with @mention**, and Add comments is off. **Result:** the panel shows the second sentence and nothing is saved. Lack of Add comments does not block **Private e-mail from Jira**. If Browse projects is off, both choices show the first sentence, because that check comes first.
+
+Checked against the production check that runs before the reminder is stored (22 November 2026). This is not a new click on a customer site.
+
 New reminders must be at least 1 minute in the future and within the next 12 months. Notes can have up to 1,000 characters; at least one recipient role or person must be selected.
 
 ## Worked example: follow up on a supplier every weekday
@@ -104,7 +117,7 @@ Expected comment, where the account name is an actual Jira mention:
 Reminder @your-account: QA: confirm the reminder appears in this issue
 ```
 
-**If nothing appears:** check My reminders before setting another reminder. With **Watchers** alone, comment mode has no individual recipients and ends with **not sent: nobody to notify**; choose a named person or switch to private email. An unassigned issue also needs another recipient if you selected only Assignee. A Done-category issue is skipped when skip-done is enabled. Permission errors and retries are covered in the recovery table above.
+**If nothing appears:** check My reminders before setting another reminder. With **Watchers** alone, comment mode has no individual recipients and ends with **not sent: nobody to notify**; choose a named person or switch to private email. An unassigned issue also needs another recipient if you selected only Assignee. A Done-category issue is skipped when skip-done is enabled. If **Set reminder** shows "You cannot comment on this issue" or "You cannot see this issue", nothing was saved. See [If Set reminder refuses before anything is saved](#if-set-reminder-refuses-before-anything-is-saved). Retries after a saved reminder are in the table above.
 
 **Finish:** Once does not schedule another occurrence. To stop it before processing, use **Cancel**. Do not click **Snooze** after a successful test unless you want another reminder. The comment is part of the issue history, not a private message.
 
