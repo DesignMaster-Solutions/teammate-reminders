@@ -21,12 +21,28 @@ The app checks for due reminders every 5 minutes. Delivery is not an exact-time 
 
 ## See, snooze and cancel your reminders
 
-- **On the issue:** the panel lists what is upcoming there, with a **Cancel** button.
+- **On the issue:** the panel lists every pending reminder on that issue. **Cancel** appears only on a reminder you created.
 - **Everywhere:** in the Jira sidebar, open **Apps > My reminders** for the reminders you created: **Upcoming** on top, the next one to go out first, and **History** below (sent, cancelled, failed), newest first. **Snooze 1 day** or **1 week** moves an upcoming reminder later, or sends a reminder that already went out once more, one day or one week from now; **Cancel** stops an upcoming one. The status says why a reminder did not go out: **not sent: issue was done** (you chose to skip done issues), **not sent: issue deleted**, **not sent: nobody to notify** (for example, no assignee yet), **retrying (N of 5)** while Jira is not answering, and **failed after 5 tries** after that.
+
+### When the reminder is not yours
+
+[Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira), then open an issue where a pending reminder already exists.
+
+**Upcoming on this issue** lists every pending reminder on that issue, including one created by someone else. **Cancel** is on the row only when you created it. A row that is not yours stays in the list, without that button. **Apps > My reminders** lists only reminders you created, so Snooze and Cancel there are yours.
+
+If cancel is invoked for a reminder someone else created, the panel shows this sentence and the reminder stays pending:
+
+**Only the person who created this reminder can cancel it.**
+
+Snooze has the same limit. Invoking it on someone else's reminder shows:
+
+**Only the person who created this reminder can snooze it.**
+
+Checked on 22 November 2026 against `canCancelReminder`: a pending row created by `C1` can be cancelled by `C1`, not by `C2`, and a sent row cannot. The refusal sentence is the one `cancelReminder` already returns. This is not a new click on a customer site.
 
 ### What snooze changes
 
-Only the creator can snooze or cancel a reminder. Snooze buttons appear for pending reminders and sent one-off reminders. A future reminder moves 1 or 7 days beyond its existing due time; an overdue or sent reminder moves 1 or 7 days from now. Cancelled reminders must be created again from the issue.
+Only the creator can snooze or cancel a reminder. On the issue, Cancel is omitted when the reminder is not yours. Snooze buttons appear for pending reminders and sent one-off reminders. A future reminder moves 1 or 7 days beyond its existing due time; an overdue or sent reminder moves 1 or 7 days from now. Cancelled reminders must be created again from the issue.
 
 Snoozing a monthly reminder also changes the day used for future repeats. For example, moving a reminder to February 28 makes its next monthly occurrence March 28. Without snoozing, a schedule originally set for the 31st uses the last day of February and returns to March 31.
 
