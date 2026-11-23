@@ -97,8 +97,34 @@ Checked against `snoozed` in production source `d7a2672` on 23 November 2026. Th
 | **not sent: nobody to notify** | Check that the selected role has a person, such as an assignee, or choose a specific teammate. Create a new one-off reminder if needed. |
 | **not sent: issue was done** | The skip-done option prevented delivery and stopped any recurrence. Create a new reminder and turn that option off if a completed issue still needs follow-up. |
 | **not sent: issue deleted** | Set a reminder on the replacement issue, if one exists. |
-| Subscription not active | Ask a Jira admin to activate or renew the app subscription. |
+| Subscription not active | The issue panel shows the sentence in [When the subscription is not active](#when-the-subscription-is-not-active). **Snooze** on **My reminders** shows the other sentence there. **Cancel** on **My reminders** still runs. |
 | Reminders turned off for this project | The form is not on the issue. See [When the project is not on the list](#when-the-project-is-not-on-the-list). |
+
+### When the subscription is not active
+
+[Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira), then open an issue in an allowed project and click **View app actions > Reminders**.
+
+The issue panel checks the project list first. A project that is off the list shows [When the project is not on the list](#when-the-project-is-not-on-the-list) and does not show this warning.
+
+**Example input:** the Marketplace license is present and not active. The project list is empty, so every project is allowed. You open `SHOP-1`.
+
+**Result:** the panel shows `The Teammate Reminders subscription is not active. Ask a Jira admin to renew it.` There is no date, no **Set reminder**, and no **Cancel** on that issue. Nothing new is stored.
+
+**Apps > My reminders** does not read the license. A pending reminder you already saved still lists **Snooze 1 day**, **1 week**, and **Cancel**.
+
+**Example input:** that page shows a pending reminder due `2026-11-24T12:00:00.000Z`. You click **Snooze 1 day** or **1 week**.
+
+**Result:** the page shows `Your Teammate Reminders subscription is not active. Ask a Jira admin to renew it.` The due time stays `2026-11-24T12:00:00.000Z`. **Set reminder** returns the same sentence if it is invoked while the license is inactive. That check runs before the project list, before the time check, and before the reminder is stored. The issue panel does not offer **Set reminder** while the warning above is on screen.
+
+**Cancel** on **My reminders** still runs. That action does not read the license, so the reminder becomes cancelled and the click does not show the subscription sentence.
+
+A development install with no license object does not show the warning. A missing license is treated as allowed, so **Set reminder** and **Snooze** run.
+
+The scheduled sender in this source does not read the license. This page does not say whether a reminder that is already stored is delivered after the subscription lapses. To stop one, use **Cancel** on **My reminders**.
+
+An inactive subscription does not show the sentences in [When Snooze refuses](#when-snooze-refuses). The license check runs first.
+
+Checked against production source `d7a2672` on 23 November 2026. This is not a new click on a customer site.
 
 ### If Set reminder refuses before anything is saved
 
