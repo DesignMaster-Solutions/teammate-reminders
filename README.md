@@ -88,6 +88,39 @@ A reminder saved at the Set reminder maximum, exactly 366 days ahead, and snooze
 
 Checked against `snoozed` in production source `d7a2672` on 23 November 2026. This is not a new click on a customer site.
 
+A Snooze or Cancel whose id is missing, and a Snooze whose stored row is gone, show the sentence in [When the reminder no longer exists](#when-the-reminder-no-longer-exists).
+
+### When the reminder no longer exists
+
+[Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira), then open **Apps > My reminders**.
+
+**Snooze 1 day**, **1 week** and **Cancel** send the id of the row on that page. The issue panel sends an id only when you click **Cancel**. The issue panel has no Snooze. A row that is still on screen has an id, so a click on a row that is still stored does not show the sentence below.
+
+| What reaches the app | Cancel | Snooze |
+|---|---|---|
+| No id, an id that is not text, or an empty id | **This reminder no longer exists.** Nothing is stored. | **This reminder no longer exists.**, after the subscription check. Nothing is stored. |
+| A text id, and no stored row for it | No red sentence. The page reloads. | **This reminder no longer exists.** Nothing is stored. The due time is not moved. |
+| A stored row you created that is already cancelled | The status stays cancelled. This sentence is not shown. | **This reminder was cancelled. Set a new one from the issue.** See [When Snooze refuses](#when-snooze-refuses). |
+| A stored row someone else created | **Only the person who created this reminder can cancel it.** | **Only the person who created this reminder can snooze it.** See [When the reminder is not yours](#when-the-reminder-is-not-yours). |
+
+An id made only of spaces is text, so the app looks it up. It is not refused as an empty id. If that key is not stored, Cancel finishes with no sentence and Snooze shows **This reminder no longer exists.**
+
+**Example input:** My reminders listed a sent reminder. The stored row is gone before the click. You click **Snooze 1 day**.
+
+**Result:** **This reminder no longer exists.** The due time is not moved. **Snooze 1 week** on that same missing row shows the same sentence. Set a new reminder from the issue.
+
+**Example input:** the same missing row, and the click is **Cancel**.
+
+**Result:** there is no red sentence. The page reloads and the row is not listed.
+
+**Example input:** Cancel is invoked with no id.
+
+**Result:** **This reminder no longer exists.** Nothing is stored. Snooze with no id shows the same sentence, unless the subscription is inactive.
+
+An inactive subscription does not reach this sentence on Snooze. That click shows the sentence in [When the subscription is not active](#when-the-subscription-is-not-active) first. Cancel does not read the license, so Cancel with no id still shows **This reminder no longer exists.**
+
+Checked against `cancelReminder` and `snoozeReminder` in production source `d7a2672` on 23 November 2026. Cancel checks the id, then reads the row, then returns without this sentence when the row is missing. Snooze checks the license, then the id, then reads the row, and shows this sentence when the row is missing, before it checks who created the reminder and before it changes the due time. This is not a new click on a customer site.
+
 ### If a reminder does not arrive
 
 | What you see | What to do |
@@ -98,6 +131,7 @@ Checked against `snoozed` in production source `d7a2672` on 23 November 2026. Th
 | **not sent: issue was done** | The skip-done option prevented delivery and stopped any recurrence. Create a new reminder and turn that option off if a completed issue still needs follow-up. |
 | **not sent: issue deleted** | Set a reminder on the replacement issue, if one exists. |
 | Subscription not active | The issue panel shows the sentence in [When the subscription is not active](#when-the-subscription-is-not-active). **Snooze** on **My reminders** shows the other sentence there. **Cancel** on **My reminders** still runs. |
+| **This reminder no longer exists.** | The click had no id, or Snooze ran after the stored row was removed. See [When the reminder no longer exists](#when-the-reminder-no-longer-exists). Cancel of a missing row does not show this sentence. |
 | Reminders turned off for this project | The form is not on the issue. See [When the project is not on the list](#when-the-project-is-not-on-the-list). |
 
 ### When the subscription is not active
