@@ -87,7 +87,28 @@ What those buttons change comes from the production logic (source `5b668669`), r
 
 Checked against the production check that runs before the reminder is stored (22 November 2026). This is not a new click on a customer site.
 
-New reminders must be at least 1 minute in the future and within the next 12 months. Notes can have up to 1,000 characters; at least one recipient role or person must be selected.
+### When Set reminder refuses the time
+
+[Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira), then open an issue and click **View app actions > Reminders**. These sentences appear in red when you click **Set reminder**. The app has not stored a reminder. It has not asked Jira whether you can browse or comment on the issue. **Apps > My reminders** does not gain a row.
+
+| What you entered | What you see |
+|---|---|
+| Date or Time is empty, or the browser cannot read that pair | **Pick a date and a time.** |
+| A time already past, or less than 1 minute from the click | **The reminder time must be at least 1 minute in the future.** |
+| A time more than 366 days after the click | **The reminder time must be within the next 12 months.** |
+| **Remind** is empty and **Also remind these people** is empty | **Choose who gets reminded.** |
+
+A time exactly 1 minute ahead is accepted. A time exactly 366 days ahead is accepted. The panel says "12 months". The check is 366 days, not a calendar year.
+
+**Example input:** **Remind** is **Me**, and the time is 30 seconds from the click. **Result:** **The reminder time must be at least 1 minute in the future.** Nothing is saved. Move the time at least one minute ahead and click **Set reminder** again.
+
+If the time is also too soon and nobody is selected, both sentences appear in one line, the time sentence first: `The reminder time must be at least 1 minute in the future. Choose who gets reminded.`
+
+The permission sentences above are checked only after the time and the recipient are accepted.
+
+Checked against `validateReminder` in production source `d7a2672` on 22 November 2026. `createReminder` calls that check before it reads Jira permissions and before it stores the reminder. This is not a new click on a customer site.
+
+Notes can have up to 1,000 characters. The exact red text for a time or a missing recipient is in the section above.
 
 ## Worked example: follow up on a supplier every weekday
 
@@ -122,7 +143,7 @@ Choose this when the follow-up should remain in the issue's conversation, rather
 [Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira). The public listing's **Try it free** opens **Select a site**, followed by **Review and install**. An admin should review the current price and subscription terms before activation. If you see **Request app**, follow the admin-request path instead. An existing installation can go straight to the issue steps below.
 
 1. Open a test issue that you can browse and comment on, in a status outside Jira's Done category.
-2. Open **View app actions > Reminders**. Set a time a few minutes in the future, allowing at least one minute before saving. A due time is not a guaranteed delivery time; the app checks every five minutes.
+2. Open **View app actions > Reminders**. Set a time a few minutes in the future, allowing at least one minute before saving. A refused time shows the sentence in [When Set reminder refuses the time](#when-set-reminder-refuses-the-time). A due time is not a guaranteed delivery time; the app checks every five minutes.
 3. Keep **Me** as the only recipient and leave **Also remind these people** empty. Choose **Comment with @mention (bell + e-mail)** and **Once**.
 4. Enter `QA: confirm the reminder appears in this issue`. Keep **Skip if the issue is already done** enabled. Click **Set reminder** once and verify the saved time under **Upcoming on this issue**.
 5. After processing, refresh the issue and open **Activity > Comments**. Look for a comment by Teammate Reminders that mentions your account and contains the exact note. In **Apps > My reminders**, the one-off should move to **History** with **sent**. These are separate checks: do not treat the initial success banner as proof of delivery.
