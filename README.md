@@ -72,7 +72,7 @@ What those buttons change comes from the production logic (source `5b668669`), r
 | **not sent: issue was done** | The skip-done option prevented delivery and stopped any recurrence. Create a new reminder and turn that option off if a completed issue still needs follow-up. |
 | **not sent: issue deleted** | Set a reminder on the replacement issue, if one exists. |
 | Subscription not active | Ask a Jira admin to activate or renew the app subscription. |
-| Reminders turned off for this project | Ask a Jira admin to check the project allowlist. |
+| Reminders turned off for this project | The form is not on the issue. See [When the project is not on the list](#when-the-project-is-not-on-the-list). |
 
 ### If Set reminder refuses before anything is saved
 
@@ -170,6 +170,29 @@ This proves a scheduled comment on the QA installation, not a new Marketplace in
 
 
 **Jira settings > Apps > Teammate Reminders** takes a list of project keys (for example `SHOP, OPS`). Reminders can then be set only in those projects. Empty means every project.
+
+## When the project is not on the list
+
+[Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira), then open an issue and click **View app actions > Reminders**.
+
+An empty project list allows every project. A saved list allows only those project keys. The issue panel checks that list before it checks the subscription, and before it shows the date, the time, or **Set reminder**.
+
+**Input:** the saved list is `SHOP`. You open `OPS-1`.
+
+**Result:** `Reminders are turned off for this project. A Jira admin can turn them on in Apps, Teammate Reminders.` There is no date field and no **Set reminder**. Nothing is stored, and **Apps > My reminders** does not gain a row. This screen does not show the subscription warning.
+
+`SHOP-12` is allowed when the list contains `SHOP`. The key before the hyphen is what counts, and letter case does not matter.
+
+**To allow the project:** a Jira admin opens **Jira settings > Apps > Teammate Reminders**.
+
+| What the admin saves | What Save says | Which issues show the form |
+|---|---|---|
+| An empty field | `Reminders are on for every project.` | Every project. |
+| `shop, ops` | `Reminders are on for: SHOP, OPS.` | `SHOP-12` and `OPS-9`. `LEG-1` still shows the sentence above. |
+
+A token that is not a project key, such as `1bad`, is left out of the saved list. Someone who is not a Jira admin sees `Only Jira admins can change these settings.` The saved list does not change.
+
+Checked against `isProjectAllowed` and `parseProjectList` in production source `d7a2672` on 22 November 2026. The panel returns the sentence above when `allowed` is false, and that return is before the `licensed` check. This is not a new click on a customer site.
 
 ## Data and privacy
 
