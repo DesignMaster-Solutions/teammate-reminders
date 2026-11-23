@@ -8,12 +8,12 @@ Install [Teammate Reminders for Jira from the Atlassian Marketplace](https://mar
 
 1. Open a Jira issue. Below the title, click the **View app actions** icon and choose **Reminders**. The panel stays on the issue.
 2. Pick the **Date** and the **Time (24h)**. The list offers 15-minute steps and you can type any minute. Enter times in your browser’s local time zone; changing your Jira profile does not change the browser clock. The shortcuts above the fields fill both in one click: **In 1 hour** and **In 3 hours** (rounded up to the next quarter hour), **Today 17:00** (offered until 16:00), **Tomorrow 09:00** and **Next Monday 09:00**.
-3. Under **Remind**, choose Me, Assignee, Reporter or Watchers. Add up to 20 people in **Also remind these people**.
+3. Under **Remind**, choose Me, Assignee, Reporter or Watchers. Add up to 20 people in **Also remind these people**. Passing 20 shows the sentence in [When Set reminder refuses the form](#when-set-reminder-refuses-the-form).
 4. Under **How**, choose one:
    - **Private e-mail from Jira**: only the recipients see it. The subject carries the issue key and your note (`Reminder: KEY: note (summary)`), so it reads in the inbox list.
    - **Comment with @mention**: a comment visible to people who can read the issue, mentioning the selected people. Jira controls notification delivery; a posted comment does not prove a bell notification or email arrived. Watchers alone do not resolve to mentions: choose Me, Assignee, Reporter or specific people, or use private email for Watchers.
 5. Under **Repeat**, choose Once, Every day, Every weekday (Mon-Fri), Every week or Every month. Every weekday skips Saturday and Sunday in your own time zone, so a Friday reminder comes back on Monday at the same local time. Every month keeps the same day of the month and the same local time; a shorter month uses its last day.
-6. Add an optional **Note** and click **Set reminder**.
+6. Add an optional **Note** and click **Set reminder**. The note field stops at 1000 characters. A request that still carries more shows the sentence in [When Set reminder refuses the form](#when-set-reminder-refuses-the-form).
 
 Recipients are resolved when the reminder is sent, so if the issue changes hands the new assignee gets it. With **Skip if the issue is already done** on, a reminder on a finished issue is not sent, and a repeating reminder stops.
 
@@ -160,7 +160,32 @@ The permission sentences above are checked only after the time and the recipient
 
 Checked against `validateReminder` in production source `d7a2672` on 22 November 2026. `createReminder` calls that check before it reads Jira permissions and before it stores the reminder. This is not a new click on a customer site.
 
-Notes can have up to 1,000 characters. The exact red text for a time or a missing recipient is in the section above.
+A note past 1000 characters, more than 20 people, a person id the app does not accept, or an issue key the app does not accept shows the sentence in [When Set reminder refuses the form](#when-set-reminder-refuses-the-form).
+
+### When Set reminder refuses the form
+
+[Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira), then open an issue and click **View app actions > Reminders**. These sentences appear in red when you click **Set reminder**. The app has not stored a reminder. It has not asked Jira whether you can browse or comment on the issue. **Apps > My reminders** does not gain a row.
+
+The panel has no issue-key field. The key is the issue you opened. **Also remind these people** does not stop at 20. **Note (optional)** stops at 1000 characters, so typing in the panel stops before the note sentence.
+
+| What was sent | What you see |
+|---|---|
+| The open issue key is empty, lower case, has a space, a project key longer than 10 characters, or an issue number longer than 9 digits | **Invalid issue key.** |
+| One person id is blank, shorter than 6 characters, longer than 128, or contains a space | **One of the people is not a valid Atlassian account.** |
+| 21 different people | **At most 20 people per reminder.** |
+| A note of 1001 characters after spaces at the ends are removed | **The note can have at most 1000 characters.** |
+
+`SHOP-1` is accepted. `shop-12` is not. A project key of 10 characters and an issue number of 9 digits, `ABCDEFGHIJ-123456789`, is accepted. One more character on the project key or on the number is **Invalid issue key.** An id of 6 characters is accepted. An id of 5 is not. The same account repeated 21 times counts as one person.
+
+**Example input:** **Remind** is **Me**, the time is one hour ahead, and **Also remind these people** has 21 different people. **Result:** **At most 20 people per reminder.** Nothing is saved. Remove one person and click **Set reminder** again.
+
+A key the app refuses, 21 people whose ids the app refuses, and a note of 1001 characters, with a valid time, show one line in this order: `Invalid issue key. One of the people is not a valid Atlassian account. At most 20 people per reminder. The note can have at most 1000 characters.`
+
+A person who fails the account check still counts as a person. That click does not also show **Choose who gets reminded.** That sentence stays in [When Set reminder refuses the time](#when-set-reminder-refuses-the-time), and only when both **Remind** and **Also remind these people** are empty.
+
+A key that fails and a time under one minute, with 21 accepted people and a note of 1001 characters, shows the key sentence first, then **The reminder time must be at least 1 minute in the future.**, then the 20-person sentence, then the note sentence.
+
+Checked against `validateReminder` in production source `d7a2672` on 23 November 2026. `createReminder` calls that check before it reads Jira permissions and before it stores the reminder. This is not a new click on a customer site.
 
 ## Worked example: follow up on a supplier every weekday
 
