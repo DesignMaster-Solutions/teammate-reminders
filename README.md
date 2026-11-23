@@ -46,6 +46,8 @@ Only the creator can snooze or cancel a reminder. On the issue, a cancel by anyo
 
 Snoozing a monthly reminder also changes the day used for future repeats. For example, moving a reminder to February 28 makes its next monthly occurrence March 28. Without snoozing, a schedule originally set for the 31st uses the last day of February and returns to March 31.
 
+The sentences Snooze shows when it refuses are in [When Snooze refuses](#when-snooze-refuses).
+
 ### A sent one-off keeps Snooze
 
 The Marketplace highlight "Every reminder in one list" shows this screen. On the app, **Snooze 1 day** and **1 week** stay on a reminder that already went out once. The listing caption is "My reminders on 21 Nov 2026. Sent SHOP-6 still has Snooze 1 day and 1 week." The image file on the listing is `2689ffda-3481-4c9c-bcab-751ec1302391`. Atlassian recompressed it, so the bytes differ from the file in this guide.
@@ -61,6 +63,30 @@ What those buttons change comes from the production logic (source `5b668669`), r
 - **Snooze 1 day** on a pending reminder that is still one hour away moves that due time by 24 hours, to `2026-11-23T02:42:54.529Z`. It does not start the day from the moment you click.
 
 [Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira). This screen is the development installation, not a new Marketplace install and not a clicked snooze.
+
+### When Snooze refuses
+
+[Install Teammate Reminders for Jira](https://marketplace.atlassian.com/apps/2781565032/teammate-reminders-for-jira), then open **Apps > My reminders**.
+
+**Snooze 1 day** and **1 week** are on a pending reminder, and on a sent reminder that does not repeat. A cancelled row has no Snooze button. The issue panel has no Snooze.
+
+| What you snooze | What you see |
+|---|---|
+| A cancelled reminder, if Snooze runs after that row was cancelled | **This reminder was cancelled. Set a new one from the issue.** The due time stays. Set a new reminder from the issue. |
+| A length other than 1 day or 1 week | **Snooze for 1 day or 1 week.** The two buttons send only those lengths. |
+| A new due time more than 366 days after the click | **A reminder can be at most one year ahead.** The due time stays. |
+
+Set reminder uses a different sentence for the same 366-day limit: **The reminder time must be within the next 12 months.** A time exactly 366 days ahead can be saved. Snooze then adds 1 day or 7 days on top of the due time that is already stored. The panel says "one year". The check is 366 days, not a calendar year.
+
+**Example input:** you open My reminders at `2026-11-23T03:40:00.000Z`. A pending reminder is due `2027-11-24T03:40:00.000Z`, which is 366 days after that click. You click **Snooze 1 day**.
+
+**Result:** **A reminder can be at most one year ahead.** The due time stays `2027-11-24T03:40:00.000Z`. **Snooze 1 week** on that same reminder is the same sentence. Nothing new is stored.
+
+A pending reminder due `2027-11-23T03:40:00.000Z` (365 days after the same click) accepts **Snooze 1 day**. The new due time is `2027-11-24T03:40:00.000Z`. **Snooze 1 week** on that 365-day reminder is refused, because 365 plus 7 is 372 days. A pending reminder due `2027-11-17T03:40:00.000Z` (359 days) accepts **Snooze 1 week**, and the new due time is `2027-11-24T03:40:00.000Z`. One millisecond later than that 359-day due time, the week is refused.
+
+A reminder saved at the Set reminder maximum, exactly 366 days ahead, and snoozed at that same moment is the refused example. Wait one day, and **Snooze 1 day** is accepted. The new due time is then 366 days after that later click.
+
+Checked against `snoozed` in production source `d7a2672` on 23 November 2026. This is not a new click on a customer site.
 
 ### If a reminder does not arrive
 
